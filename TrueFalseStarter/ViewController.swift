@@ -29,6 +29,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var answer4Button: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
     var counter = 15
+    var isGameOver = false
+    @IBOutlet weak var nextQuestionButton: UIButton!
     
     @IBAction func answerButtonPressed(sender: UIButton) {
 
@@ -67,7 +69,9 @@ class ViewController: UIViewController {
     func displayQuestion() {
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(questionsAndAnswers.trivia.count)
         //In order to display a question only once, we add the index of the current question to a black list
-        if indexBlacklist.contains(indexOfSelectedQuestion) {
+        if indexBlacklist.count == 4 {
+            exitGame()
+        } else if indexBlacklist.contains(indexOfSelectedQuestion) {
             displayQuestion()
         } else {
         indexBlacklist.append(indexOfSelectedQuestion)
@@ -94,7 +98,7 @@ class ViewController: UIViewController {
     }
     
     func updateCounter() {
-        if self.counter > 0 {
+        if self.counter > 0 && isGameOver == false {
             timerLabel.text = String(self.counter--)
         } else if self.counter == 0 {
             timerLabel.text = String(0)
@@ -115,6 +119,22 @@ class ViewController: UIViewController {
     
     func setCommentLabel() {
         commentLabel.text = "Ready?"
+    }
+    
+    func exitGame() {
+        stopTimer()
+        self.isGameOver = true
+        commentLabel.hidden = true
+        questionField.text = "Thanks for playing!"
+        answer1Button.hidden = true
+        answer2Button.hidden = true
+        answer3Button.hidden = true
+        answer4Button.hidden = true
+        nextQuestionButton.hidden = true
+        timerLabel.hidden = true
+
+        
+        
     }
     
     // MARK: Sounds

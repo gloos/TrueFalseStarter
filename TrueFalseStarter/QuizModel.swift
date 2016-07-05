@@ -9,13 +9,7 @@
 import Foundation
 
 struct QuestionsAndAnswers {
-//    let trivia: [[String : String]] = [
-//        ["Question": "Only female koalas can whistle", "Answer": "False"],
-//        ["Question": "Blue whales are technically whales", "Answer": "True"],
-//        ["Question": "Camels are cannibalistic", "Answer": "False"],
-//        ["Question": "All ducks are birds", "Answer": "True"]
-//    ]
-//    
+
     let trivia: [[String : String]] = [
         ["Question": "Who was the CEO of Apple in 1978?", "One": "Steve Jobs", "Two": "Jean-Louis Gasse", "Answer" : "Michael Scott", "Three" : "Tim Cook"],
         ["Question" : "Which device do you carry in your pocket all day?", "Answer": "iPhone", "One": "iPad", "Two" : "MacBook", "Three" : "iMac"],
