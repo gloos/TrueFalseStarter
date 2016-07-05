@@ -37,7 +37,7 @@ class ViewController: UIViewController {
             correctAnswerSound()
             playCorrectAnswerSound()
             stopTimer()
-            // In order to display the correct answer, we have to check it is not nil, else it will display a wrapped optional.
+            // In order to display the correct answer (Option number 3), we have to check it is not nil, else it will display a wrapped optional.
         } else if (questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"] != nil) {
             commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
             incorrectAnswerSound()
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
     }
     
     // MARK: Timer methods
-    
+    // Option number 2
     func startTimer() {
         self.counter = 15
         timerLabel.text = String(self.counter)
@@ -130,7 +130,7 @@ class ViewController: UIViewController {
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
-    
+    // Optional number 1
     func correctAnswerSound() {
         self.gameSound = 0
         let pathToSoundFile = NSBundle.mainBundle().pathForResource("applause2", ofType: "wav")
