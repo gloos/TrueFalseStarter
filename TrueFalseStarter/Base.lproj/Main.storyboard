@@ -82,6 +82,12 @@
                                     <action selector="nextQuestion:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lRh-TW-OEQ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="15" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcN-rq-fso">
+                                <rect key="frame" x="303" y="486" width="36" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.031372549019607843" green="0.16862745098039217" blue="0.24313725490196078" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -117,6 +123,7 @@
                         <outlet property="answer4Button" destination="20G-im-gvI" id="bjx-hv-8tL"/>
                         <outlet property="commentLabel" destination="40o-lg-mg5" id="NSB-Vf-JCc"/>
                         <outlet property="questionField" destination="I3V-ih-1Ky" id="7UI-o2-ATi"/>
+                        <outlet property="timerLabel" destination="PcN-rq-fso" id="C1H-9z-tCy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

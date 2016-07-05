@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     var gameSound: SystemSoundID = 0
     
     let questionsAndAnswers = QuestionsAndAnswers()
+    var timer = NSTimer()
     
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var questionField: UILabel!
@@ -29,6 +30,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var answer2Button: UIButton!
     @IBOutlet weak var answer3Button: UIButton!
     @IBOutlet weak var answer4Button: UIButton!
+    @IBOutlet weak var timerLabel: UILabel!
+    var counter = 15
     
     @IBAction func answerButtonPressed(sender: UIButton) {
 
@@ -48,6 +51,30 @@ class ViewController: UIViewController {
         displayQuestion()
         displayAnswers()
         setCommentLabel()
+        startTimer()
+    }
+    
+    func startTimer() {
+        self.counter = 15
+        timerLabel.text = String(self.counter)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+    }
+    
+    func updateCounter() {
+        if self.counter > 0 {
+            timerLabel.text = String(self.counter--)
+        } else if self.counter == 0 {
+            timerLabel.text = String(0)
+            commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
+            stopTimer()
+            incorrectAnswerSound()
+            playIncorrectAnswerSound()
+
+        }
+    }
+    
+    func stopTimer() {
+        self.timer.invalidate()
     }
 
     override func viewDidLoad() {
@@ -58,6 +85,7 @@ class ViewController: UIViewController {
         displayQuestion()
         setCommentLabel()
         displayAnswers()
+        startTimer()
     }
     
     func setCommentLabel() {
