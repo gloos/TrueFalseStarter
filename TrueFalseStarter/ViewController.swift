@@ -12,9 +12,6 @@ import AudioToolbox
 
 class ViewController: UIViewController {
     
-    let questionsPerRound = 4
-    var questionsAsked = 0
-    var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
     var indexBlacklist = [Int]()
     
@@ -39,11 +36,13 @@ class ViewController: UIViewController {
             commentLabel.text = "You have the right answer!"
             correctAnswerSound()
             playCorrectAnswerSound()
+            stopTimer()
             // In order to display the correct answer, we have to check it is not nil, else it will display a wrapped optional.
         } else if (questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"] != nil) {
             commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
             incorrectAnswerSound()
             playIncorrectAnswerSound()
+            stopTimer()
         }
     }
   
@@ -53,6 +52,40 @@ class ViewController: UIViewController {
         setCommentLabel()
         startTimer()
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        loadGameStartSound()
+        playGameStartSound()
+        displayQuestion()
+        setCommentLabel()
+        displayAnswers()
+        startTimer()
+    }
+
+
+    func displayQuestion() {
+        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(questionsAndAnswers.trivia.count)
+        //In order to display a question only once, we add the index of the current question to a black list
+        if indexBlacklist.contains(indexOfSelectedQuestion) {
+            displayQuestion()
+        } else {
+        indexBlacklist.append(indexOfSelectedQuestion)
+        print("Blacklist... \(indexBlacklist)")
+        let questionDictionary = questionsAndAnswers.trivia[indexOfSelectedQuestion]
+        questionField.text = questionDictionary["Question"]
+        }
+    }
+
+    
+    func displayAnswers() {
+        answer1Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["One"], forState: .Normal)
+        answer2Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Two"], forState: .Normal)
+        answer3Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"], forState: .Normal)
+        answer4Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Three"], forState: .Normal)
+    }
+    
+    // MARK: Timer methods
     
     func startTimer() {
         self.counter = 15
@@ -65,123 +98,28 @@ class ViewController: UIViewController {
             timerLabel.text = String(self.counter--)
         } else if self.counter == 0 {
             timerLabel.text = String(0)
-            commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
+            commentLabel.text = "You ran out of time! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
             stopTimer()
             incorrectAnswerSound()
             playIncorrectAnswerSound()
-
+            
         }
     }
     
     func stopTimer() {
         self.timer.invalidate()
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        loadGameStartSound()
-        // Start game
-        playGameStartSound()
-        displayQuestion()
-        setCommentLabel()
-        displayAnswers()
-        startTimer()
-    }
+    
+    // MARK: Helper methods
+    
     
     func setCommentLabel() {
         commentLabel.text = "Ready?"
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(questionsAndAnswers.trivia.count)
-        if indexBlacklist.contains(indexOfSelectedQuestion) {
-            displayQuestion()
-        } else {
-    //    we add the index to the blacklist, so this question isn't shown again during the current game
-        indexBlacklist.append(indexOfSelectedQuestion)
-        print("Blacklist... \(indexBlacklist)")
-            print("Answers \(questionsAndAnswers.trivia[0].values)")
-        let questionDictionary = questionsAndAnswers.trivia[indexOfSelectedQuestion]
-        questionField.text = questionDictionary["Question"]
-
-        }
-    }
-
     
-    func displayAnswers() {
-        answer1Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["One"], forState: .Normal)
-        answer2Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Two"], forState: .Normal)
-        answer3Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"], forState: .Normal)
-        answer4Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Three"], forState: .Normal)
-    }
-    
-    func displayScore() {
-        // Hide the answer buttons
-        
-        // Display play again button
-        
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
-        
-    }
-    
-    @IBAction func checkAnswer(sender: UIButton) {
-        // Increment the questions asked counter
-        questionsAsked += 1
-        
-//        let selectedQuestionDict = questionsAndAnswers.trivia[indexOfSelectedQuestion]
-//        let correctAnswer = selectedQuestionDict["Answer"]
-//        
-//        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
-//            correctQuestions += 1
-//            questionField.text = "Correct!"
-//        } else {
-//            questionField.text = "Sorry, wrong answer!"
-//        }
-//        
-//        loadNextRoundWithDelay(seconds: 2)
-    }
-    
-    func nextRound() {
-        if questionsAsked == questionsPerRound {
-            // Game is over
-            displayScore()
-        } else {
-            // Continue game
-            displayQuestion()
-        }
-    }
-    
-    @IBAction func playAgain() {
-        // Show the answer buttons
-//        trueButton.hidden = false
-//        falseButton.hidden = false
-        
-        questionsAsked = 0
-        correctQuestions = 0
-        indexBlacklist = []
-        nextRound()
-    }
+    // MARK: Sounds
     
 
-    
-    // MARK: Helper Methods
-    
-    func loadNextRoundWithDelay(seconds seconds: Int) {
-        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
-        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
-        // Calculates a time value to execute the method given current time and delay
-        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, delay)
-        
-        // Executes the nextRound method at the dispatch time on the main queue
-        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
-            self.nextRound()
-        }
-    }
     
     func loadGameStartSound() {
         let pathToSoundFile = NSBundle.mainBundle().pathForResource("GameSound", ofType: "wav")
