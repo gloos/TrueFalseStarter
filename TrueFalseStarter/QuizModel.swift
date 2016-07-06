@@ -8,27 +8,25 @@
 
 import Foundation
 
-struct QuestionsAndAnswers {
-
-    let trivia: [[String : String]] = [
-        ["Question": "Who was the CEO of Apple in 1978?", "One": "Steve Jobs", "Two": "Jean-Louis Gasse", "Answer" : "Michael Scott", "Three" : "Tim Cook"],
-        ["Question" : "Which device do you carry in your pocket all day?", "Answer": "iPhone", "One": "iPad", "Two" : "MacBook", "Three" : "iMac"],
-        ["Question" : "Who was the Prime Minister of the UK in 1984?", "One": "David Cameron", "Answer": "Margaret Thatcher", "Two" : "Tony Blair", "Three" : "Winston Churchill"],
-        ["Question" : "Who was the first woman President or Prime Minister in the world?", "One": "Margaret Thatcher", "Two": "Isabel Peron", "Three" : "Ku-baba", "Answer" : "Sirivamo Bandaranaike"]
-        ]
+class Trivia {
+    var question: String
+    var answer: String
+    var guess1: String
+    var guess2: String
+    var guess3: String
     
-    
-}
-
-struct Trivia {
-    let question: String
-    let answer: String
-    let guess1: String
-    let guess2: String
-    let guess3: String
+    init(question: String, answer: String, guess1: String, guess2: String, guess3: String) {
+        self.question = question
+        self.answer = answer
+        self.guess1 = guess1
+        self.guess2 = guess2
+        self.guess3 = guess3
+    }
 }
 
 let trivia1 = Trivia(question: "Who was the CEO of Apple in 1978?", answer: "Michael Scott", guess1: "Steve Jobs", guess2: "Jean-Louis Gasse", guess3: "Tim Cook")
 let trivia2 = Trivia(question: "Which device do you carry in your pocket all day?", answer: "iPhone", guess1: "iPad", guess2: "MacBook", guess3: "iMac")
 let trivia3 = Trivia(question: "Who was the Prime Minister of the UK in 1984?", answer: "Margaret Thatcher", guess1: "David Cameron", guess2: "Tony Blair", guess3: "Winston Churchill")
 let trivia4 = Trivia(question: "Who was the first woman President or Prime Minister in the world?", answer: "Sirivamo Bandaranaike", guess1: "Margaret Thatcher", guess2: "Isabel Peron", guess3: "Ku-baba")
+
+let allQuestionsAndAnswers = [trivia1, trivia2, trivia3, trivia4]

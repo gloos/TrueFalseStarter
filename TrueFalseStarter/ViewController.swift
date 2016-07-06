@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     
     var gameSound: SystemSoundID = 0
     
-    let questionsAndAnswers = QuestionsAndAnswers()
+    let questionsAndAnswers = allQuestionsAndAnswers
     var timer = NSTimer()
     
     @IBOutlet weak var commentLabel: UILabel!
@@ -34,14 +34,14 @@ class ViewController: UIViewController {
     
     @IBAction func answerButtonPressed(sender: UIButton) {
 
-        if sender.titleLabel?.text == questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"] {
+        if sender.titleLabel?.text == questionsAndAnswers[indexOfSelectedQuestion].answer {
             commentLabel.text = "You have the right answer!"
             correctAnswerSound()
             playCorrectAnswerSound()
             stopTimer()
             // In order to display the correct answer (Option number 3), we have to check it is not nil, else it will display a wrapped optional.
-        } else if (questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"] != nil) {
-            commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
+        } else {
+            commentLabel.text = "You are wrong! The correct answer was \(questionsAndAnswers[indexOfSelectedQuestion].answer)"
             incorrectAnswerSound()
             playIncorrectAnswerSound()
             stopTimer()
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
 
 
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(questionsAndAnswers.trivia.count)
+        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(questionsAndAnswers.count)
         //In order to display a question only once, we add the index of the current question to a black list
         if indexBlacklist.count == 4 {
             exitGame()
@@ -76,17 +76,17 @@ class ViewController: UIViewController {
         } else {
         indexBlacklist.append(indexOfSelectedQuestion)
         print("Blacklist... \(indexBlacklist)")
-        let questionDictionary = questionsAndAnswers.trivia[indexOfSelectedQuestion]
-        questionField.text = questionDictionary["Question"]
+        let questionDictionary = questionsAndAnswers[indexOfSelectedQuestion]
+        questionField.text = questionDictionary.question
         }
     }
 
     
     func displayAnswers() {
-        answer1Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["One"], forState: .Normal)
-        answer2Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Two"], forState: .Normal)
-        answer3Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"], forState: .Normal)
-        answer4Button.setTitle(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Three"], forState: .Normal)
+        answer1Button.setTitle(questionsAndAnswers[indexOfSelectedQuestion].guess1, forState: .Normal)
+        answer2Button.setTitle(questionsAndAnswers[indexOfSelectedQuestion].guess2, forState: .Normal)
+        answer3Button.setTitle(questionsAndAnswers[indexOfSelectedQuestion].answer, forState: .Normal)
+        answer4Button.setTitle(questionsAndAnswers[indexOfSelectedQuestion].guess3, forState: .Normal)
     }
     
     // MARK: Timer methods
@@ -102,7 +102,7 @@ class ViewController: UIViewController {
             timerLabel.text = String(self.counter--)
         } else if self.counter == 0 {
             timerLabel.text = String(0)
-            commentLabel.text = "You ran out of time! The correct answer was \(questionsAndAnswers.trivia[indexOfSelectedQuestion]["Answer"]!)"
+            commentLabel.text = "You ran out of time! The correct answer was \(questionsAndAnswers[indexOfSelectedQuestion].answer)"
             stopTimer()
             incorrectAnswerSound()
             playIncorrectAnswerSound()
